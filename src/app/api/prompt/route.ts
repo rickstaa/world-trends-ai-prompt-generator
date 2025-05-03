@@ -52,9 +52,9 @@ export async function POST(request: Request) {
 
     // Generate prompt and create Daydream URL.
     const prompt = await generateAnimationPrompt(normalizedTrends);
-    const daydreamUrl = `https://daydream.live/create?inputPrompt=${
-      encodeURIComponent(prompt)
-    }`;
+    const daydreamUrl = `https://daydream.live/create?inputPrompt=${btoa(
+      prompt
+    )}`;
 
     return NextResponse.json({ prompt, daydreamUrl });
   } catch (error) {
