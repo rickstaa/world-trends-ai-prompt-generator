@@ -96,7 +96,7 @@ export const generateAnimationPrompt = async (
     try {
       const openAiRequest = {
         ...request,
-        model: "gpt-4",
+        model: "gpt-3.5-turbo",
         max_tokens: 59,
       } as OpenAI.ChatCompletionCreateParamsNonStreaming;
       const openAiResponse =
