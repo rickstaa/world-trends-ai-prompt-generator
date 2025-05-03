@@ -15,7 +15,12 @@ export async function GET() {
     if (!trends?.length) {
       return NextResponse.json(
         { error: "No trends data available" },
-        { status: 400 }
+        {
+          status: 400,
+          headers: {
+            "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
+          },
+        }
       );
     }
 
@@ -26,7 +31,8 @@ export async function GET() {
       { trends: normalizedTrends },
       {
         headers: {
-          "Cache-Control": "public, max-age=600, stale-while-revalidate=300",
+          "Cache-Control":
+            "public, s-maxage=3600, max-age=600, stale-while-revalidate=600",
         },
       }
     );
@@ -34,7 +40,12 @@ export async function GET() {
     console.error("Error fetching trends:", error);
     return NextResponse.json(
       { error: "Failed to fetch trends" },
-      { status: 500 }
+      {
+        status: 500,
+        headers: {
+          "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
+        },
+      }
     );
   }
 }
