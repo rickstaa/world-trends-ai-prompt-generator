@@ -62,7 +62,7 @@ const applyDaydreamParams = (prompt: string): string => {
   const params = Object.entries(DAYDREAM_PARAMS)
     .map(([key, value]) => `--${key} ${value}`)
     .join(" ");
-  return `${prompt} ${params}`;
+  return `${prompt}${btoa(" " + params)}`;
 };
 /**
  * Renders the home page of the application.
