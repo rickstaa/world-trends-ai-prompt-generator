@@ -2,7 +2,7 @@
  * @file Utility functions for fetching and processing web trends.
  */
 
-import { ApifyClient } from "apify-client";
+import { ApifyClient, PaginatedList} from "apify-client";
 import { Trend } from "@/types";
 
 if (!process.env.APIFY_API_TOKEN) {
@@ -12,6 +12,18 @@ if (!process.env.APIFY_API_TOKEN) {
 const apifyClient = new ApifyClient({
   token: process.env.APIFY_API_TOKEN || "",
 });
+
+/** Interface representing a twitter trend entry */
+interface ApifyTwitterTrend {
+  /** Trend time */
+  time: string;
+  /** Trend time period */
+  timePeriod: string;
+  /** Trend name */
+  trend: string;
+  /** Trend tweet volume */
+  volume: string;
+}
 
 /**
  * Parses the tweet volume string from the Apify dataset and converts it to a numeric
@@ -56,11 +68,11 @@ export  const fetchTwitterTrends = async (): Promise<Trend[]> =>{
       .call(input);
 
     // Map and process the trends, then sort them by score.
-    const { items } = await apifyClient
+    const { items } = (await apifyClient
       .dataset(run.defaultDatasetId)
-      .listItems();
+      .listItems()) as unknown as PaginatedList<ApifyTwitterTrend>;
     return items
-      .map((item: any) => ({
+      .map((item: ApifyTwitterTrend) => ({
         trend: item.trend,
         score: parseTweetVolume(item.volume),
       }))

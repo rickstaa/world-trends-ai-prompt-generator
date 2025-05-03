@@ -16,7 +16,7 @@ import { Trend } from "@/types";
  * Fetches the latest web trends from the server.
  * @returns A promise that resolves to the latest trends.
  */
-export async function fetchTrendsAPI() {
+async function fetchTrendsAPI() {
   const response = await fetch("/api/trends");
   const data = await response.json();
   if (!response.ok) {
@@ -30,7 +30,7 @@ export async function fetchTrendsAPI() {
  * @param filteredTrends - The filtered trends to generate the prompt from.
  * @returns A promise that resolves to the generated prompt.
  */
-export async function generatePromptAPI(
+async function generatePromptAPI(
   filteredTrends: { trend: string; score: number }[]
 ) {
   const response = await fetch("/api/prompt", {

@@ -32,7 +32,7 @@ export const TrendsList = ({
     style={{
       maxWidth: "90%",
       overflowY: "auto",
-      marginBottom: 20,
+      marginBottom: 16,
       marginTop: 16,
     }}
   >
