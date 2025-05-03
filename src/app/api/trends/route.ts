@@ -5,6 +5,8 @@ import { NextResponse } from "next/server";
 import { fetchTwitterTrends } from "@/lib/trends";
 import { normalizeTrendScores } from "@/lib/utils";
 
+const S_MAXAGE = parseInt(process.env.TRENDS_SHARED_CACHE_MAXAGE || "3600", 10); // Default: 3600 seconds (1 hour)
+
 /**
  * Retrieve keyword list of current trends from the web.
  */
@@ -32,7 +34,7 @@ export async function GET() {
       {
         headers: {
           "Cache-Control":
-            "public, s-maxage=3600, max-age=600, stale-while-revalidate=600",
+            `public, s-maxage=${S_MAXAGE}, max-age=600, stale-while-revalidate=600`,
         },
       }
     );

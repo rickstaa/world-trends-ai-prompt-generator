@@ -8,7 +8,6 @@ World Trends AI Prompt Generator is a web application that fetches real-time web
 - **AI-Powered Prompts**: Generates concise animation prompts using Livepeer LLM Pipelines (`meta-llama/Meta-Llama-3.1-8B-Instruct`) or OpenAI's GPT-4 model.
 - **Customizable**: Allows users to select or deselect trends to tailor the generated prompts.
 - **Daydream Integration**: Provides a direct link to open prompts in Daydream for seamless creative workflows.
-- **Error Handling**: Displays user-friendly error messages when issues occur during trend fetching or prompt generation.
 
 ## Getting Started
 
@@ -18,6 +17,9 @@ World Trends AI Prompt Generator is a web application that fetches real-time web
 - API keys for Apify and OpenAI
 
 ### Installation
+
+> [!TIP]
+> Trends are cached for 1 hour by default to reduce API costs ($0.09 per 1000 requests). You can adjust this duration using the `TRENDS_CACHE_S_MAXAGE` environment variable.
 
 1. Clone the repository:
 

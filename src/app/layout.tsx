@@ -8,7 +8,7 @@ import { Theme } from "@radix-ui/themes";
 
 export const metadata: Metadata = {
   title: "World Prompt Generator",
-  description: "Generates animation prompts by analysing trends from the web.",
+  description: "Generates AI animation prompts by analysing trends from the web.",
 };
 
 /**
