@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# World Trends AI Prompt Generator
+
+World Trends AI Prompt Generator is a web application that fetches real-time web trends and generates concise, AI-powered animation prompts. These prompts are designed to inspire creative projects and can be directly used with platforms like [Daydream](https://daydream.live), a real-time AI application that performs compute on top of the [Livepeer network](https://livepeer.org). The app leverages the [Livepeer LLM Pipeline](https://docs.livepeer.org/ai/pipelines/llm) for prompt generation and falls back to the [OpenAI API](https://openai.com/api/) if needed.
+
+## Features
+
+- **Real-Time Trends**: Fetches the latest trends using the [Twitter Trends Scraper](https://apify.com/karamelo/twitter-trends-scraper) from Apify.
+- **AI-Powered Prompts**: Generates concise animation prompts using Livepeer LLM Pipelines (`meta-llama/Meta-Llama-3.1-8B-Instruct`) or OpenAI's GPT-4 model.
+- **Customizable**: Allows users to select or deselect trends to tailor the generated prompts.
+- **Daydream Integration**: Provides a direct link to open prompts in Daydream for seamless creative workflows.
+- **Error Handling**: Displays user-friendly error messages when issues occur during trend fetching or prompt generation.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js (v18 or later)
+- API keys for Apify and OpenAI
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone the repository:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```bash
+   git clone https://github.com/your-repo/world-trends-prompt-generator.git
+   cd world-trends-prompt-generator
+   ```
 
-## Learn More
+2. Install dependencies:
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   npm install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. Add your API keys to a `.env` file:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```txt
+   APIFY_API_TOKEN=your-apify-api-token
+   OPENAI_API_KEY=your-openai-api-key
+   ```
 
-## Deploy on Vercel
+4. Start the development server:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```bash
+   npm run dev
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+5. Open the app in your browser at [http://localhost:3000](http://localhost:3000).
+
+## Usage
+
+1. **View Trends**: The homepage displays the latest fetched trends.
+2. **Customize Trends**: Select or deselect trends to refine the generated prompt.
+3. **Generate Prompts**: View the AI-generated animation prompt based on your selected trends.
+4. **Export**: Copy the generated prompt or open it directly in Daydream.
+
+## Deployment
+
+Deploy the app easily on [Vercel](https://vercel.com). For more details, refer to the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying).
+
+## Contributing
+
+Contributions are welcome! Feel free to open issues or submit pull requests to improve the app.
