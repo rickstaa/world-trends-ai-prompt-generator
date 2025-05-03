@@ -76,7 +76,7 @@ export const generateAnimationPrompt = async (
     try {
       const livepeerResponse = await livepeerClient.generate.llm({
         ...request,
-        maxTokens: 59, // NOTE: Livepeer uses camelCase instead of snake_case.
+        maxTokens: 72, // NOTE: Livepeer uses camelCase instead of snake_case.
       });
       return removeLlamaHeaders(
         livepeerResponse?.llmResponse?.choices?.[0]?.message?.content ||

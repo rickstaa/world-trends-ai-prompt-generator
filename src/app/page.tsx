@@ -12,12 +12,6 @@ import { TrendsList } from "@/components/TrendsList";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Trend } from "@/types";
 
-const DAYDREAM_PARAMS = {
-  /** Diffusion Quality */
-  quality: 2,
-  /** Diffusion Creativity */
-  creativity: 0.5,
-}
 /**
  * Fetches the latest web trends from the server.
  * @returns A promise that resolves to the latest trends.
@@ -64,6 +58,7 @@ const applyDaydreamParams = (prompt: string): string => {
     .join(" ");
   return `${prompt}${btoa(" " + params)}`;
 };
+
 /**
  * Renders the home page of the application.
  */
@@ -128,7 +123,7 @@ export default function HomePage() {
     try {
       const { prompt, daydreamUrl } = await generatePromptAPI(filteredTrends);
       setPrompt(prompt);
-      setDaydreamUrl(applyDaydreamParams(daydreamUrl));
+      setDaydreamUrl(daydreamUrl);
     } catch (err) {
       console.error("Error generating prompt:", err);
       setError(err instanceof Error ? err.message : "Failed to generate prompt");
