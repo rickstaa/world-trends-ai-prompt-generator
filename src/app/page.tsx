@@ -66,6 +66,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [prompt, setPrompt] = useState<string | null>(null);
+  const [promptIsUpdating, setPromptIsUpdating] = useState(false);
   const [daydreamUrl, setDaydreamUrl] = useState<string | null>(null);
   const [trends, setTrends] = useState<{ trend: string; score: number }[]>([]);
   const [selectedTrends, setSelectedTrends] = useState<Set<string>>(new Set());
@@ -121,12 +122,16 @@ export default function HomePage() {
     filteredTrends: { trend: string; score: number }[]
   ) => {
     try {
+      setPromptIsUpdating(true);
       const { prompt, daydreamUrl } = await generatePromptAPI(filteredTrends);
+      setPromptIsUpdating(false);
       setPrompt(prompt);
       setDaydreamUrl(daydreamUrl);
     } catch (err) {
       console.error("Error generating prompt:", err);
-      setError(err instanceof Error ? err.message : "Failed to generate prompt");
+      setError(
+        err instanceof Error ? err.message : "Failed to generate prompt"
+      );
     }
   };
 
@@ -176,7 +181,11 @@ export default function HomePage() {
               <ErrorComponent message={error} />
             ) : (
               <>
-                <PromptDisplay prompt={prompt} daydreamUrl={daydreamUrl} />
+                <PromptDisplay
+                  prompt={prompt}
+                  daydreamUrl={daydreamUrl}
+                  isUpdating={promptIsUpdating}
+                />
                 <TrendsList
                   trends={trends}
                   selectedTrends={selectedTrends}

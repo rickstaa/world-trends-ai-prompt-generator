@@ -29,14 +29,14 @@ const SYSTEM_PROMPT = `
  * @param output - The raw output string from the Llama model.
  * @returns The cleaned output string.
  */
-const removeLlamaHeaders = (output: string): string  => {
+const removeLlamaHeaders = (output: string): string => {
   return output
     .replace(/\n+/g, " ") // Replace newlines with a single space
     .replace(/<\|start_header_id\|>.*?<\|end_header_id\|>/gs, "") // Remove Llama headers
     .replace(/^\s*::\s*/, "") // Remove leading "::" with optional spaces
     .replace(/\s*::\s*$/, "") // Remove trailing "::" with optional spaces
     .trim(); // Trim leading and trailing spaces
-}
+};
 
 /**
  * Generates a concise animation prompt based on the provided trends and their
@@ -78,16 +78,20 @@ export const generateAnimationPrompt = async (
         ...request,
         maxTokens: 72, // NOTE: Livepeer uses camelCase instead of snake_case.
       });
-      return removeLlamaHeaders(
-        livepeerResponse?.llmResponse?.choices?.[0]?.message?.content ||
-          "Failed to generate animation instructions."
-      );
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error("Livepeer request failed:", error.message);
-      } else {
-        console.error("Livepeer request failed:", error);
+
+      const content =
+        livepeerResponse?.llmResponse?.choices?.[0]?.message?.content;
+
+      if (!content) {
+        throw new Error("Livepeer response did not contain valid content.");
       }
+
+      return removeLlamaHeaders(content);
+    } catch (error) {
+      console.error(
+        "Livepeer request failed:",
+        error instanceof Error ? error.message : error
+      );
     }
   }
 
@@ -99,18 +103,22 @@ export const generateAnimationPrompt = async (
         model: "gpt-3.5-turbo",
         max_tokens: 59,
       } as OpenAI.ChatCompletionCreateParamsNonStreaming;
+
       const openAiResponse =
         await openAiClient.chat.completions.create(openAiRequest);
-      return (
-        openAiResponse.choices[0]?.message?.content?.trim() ||
-        "Failed to generate animation instructions."
-      );
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error("OpenAI request failed:", error.message);
-      } else {
-        console.error("OpenAI request failed:", error);
+
+      const content = openAiResponse.choices[0]?.message?.content?.trim();
+
+      if (!content) {
+        throw new Error("OpenAI response did not contain valid content.");
       }
+
+      return content;
+    } catch (error) {
+      console.error(
+        "OpenAI request failed:",
+        error instanceof Error ? error.message : error
+      );
     }
   }
 
@@ -118,4 +126,4 @@ export const generateAnimationPrompt = async (
   throw new Error(
     "Unable to generate animation prompt. Please try again later."
   );
-}
+};
