@@ -5,10 +5,10 @@ import { NextResponse } from "next/server";
 import { fetchTwitterTrends } from "@/lib/trends";
 import { normalizeTrendScores } from "@/lib/utils";
 
-export const revalidate = parseInt(
-  process.env.TRENDS_SHARED_CACHE_MAXAGE || "3600",
-  10
-); // 1 hour
+const S_MAXAGE = parseInt(process.env.TRENDS_SHARED_CACHE_MAXAGE || "3600", 10); // 1 hour
+const STALE_WHILE_REVALIDATE = 600; // 10 minutes
+
+const CACHE_HEADER = `public, s-maxage=${S_MAXAGE}, stale-while-revalidate=${STALE_WHILE_REVALIDATE}`;
 
 /**
  * Retrieve keyword list of current trends from the web.
@@ -25,7 +25,15 @@ export async function GET() {
     }
 
     const normalizedTrends = normalizeTrendScores(trends);
-    return NextResponse.json({ trends: normalizedTrends });
+    return NextResponse.json(
+      { trends: normalizedTrends },
+      {
+        status: 200,
+        headers: {
+          "Cache-Control": CACHE_HEADER,
+        },
+      }
+    );
   } catch (error) {
     console.error("Error fetching trends:", error);
     return NextResponse.json(
