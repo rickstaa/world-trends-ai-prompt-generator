@@ -7,12 +7,12 @@ import { toast } from "sonner";
 
 /** Interface representing the props for the PromptDisplay component */
 interface PromptDisplayProps {
-	/** The generated prompt to display */
-	prompt: string | null;
-	/** The URL to open in Daydream */
-	daydreamUrl: string | null;
-	/** Flag indicating if the prompt is being updated */
-	isUpdating: boolean;
+  /** The generated prompt to display */
+  prompt: string | null;
+  /** The URL to open in Daydream */
+  daydreamUrl: string | null;
+  /** Flag indicating if the prompt is being updated */
+  isUpdating: boolean;
 }
 
 /**
@@ -21,79 +21,99 @@ interface PromptDisplayProps {
  * @returns The PromptDisplay component.
  */
 export const PromptDisplay = ({
-	prompt,
-	daydreamUrl,
-	isUpdating,
-}: PromptDisplayProps) => (
-	<>
-		<Flex justify="center" style={{ marginBottom: 16 }}>
-			<Text size="4" weight="bold">
-				Generated Prompt
-			</Text>
-		</Flex>
-		<Flex justify="center">
-			<Card
-				size="3"
-				style={{
-					backgroundColor: "#212121e6",
-					maxWidth: "90%",
-					padding: 16,
-					borderRadius: 8,
-					marginBottom: 16,
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "center",
-				}}
-			>
-				{isUpdating && (
-					<Flex
-						style={{
-							position: "absolute",
-							top: 0,
-							left: 0,
-							width: "100%",
-							height: "100%",
-							zIndex: 10,
-							justifyContent: "center",
-							alignItems: "center",
-						}}
-					>
-						<Spinner size="3" style={{ color: "#fff" }} />
-					</Flex>
-				)}
-				<Text
-					size="3"
-					style={{
-						color: isUpdating ? '#a1a1aa' : '#e5e7eb',
-						textAlign: "center",
-					}}
-				>
-					{prompt || "No prompt available."}
-				</Text>
-			</Card>
-		</Flex>
-		{/* Controls */}
-		<Flex justify="center" gap="4" style={{ marginBottom: 16 }}>
-			<Button
-				onClick={() => {
-					navigator.clipboard.writeText(prompt || "");
-					toast("Prompt copied to clipboard!");
-				}}
-				variant="solid"
-				disabled={isUpdating}
-			>
-				Copy Prompt
-			</Button>
-			{daydreamUrl && (
-				<Button
-					onClick={() => window.open(daydreamUrl, "_blank")}
-					variant="solid"
-					color="cyan"
-					disabled={isUpdating}
-				>
-					Open in Daydream
-				</Button>
-			)}
-		</Flex>
-	</>
-);
+  prompt,
+  daydreamUrl,
+  isUpdating,
+}: PromptDisplayProps) => {
+  const renderContent = () => (
+    isUpdating ? (
+      <Flex direction="column" align="center" justify="center">
+        <Spinner size="3" style={{ color: "#fff" }} />
+        <Text
+          size="2"
+          style={{
+            color: "#a1a1aa",
+            marginTop: 8,
+            textAlign: "center",
+          }}
+        >
+          Generating prompt...
+        </Text>
+      </Flex>
+    ) : prompt ? (
+      <Text
+        size="3"
+        style={{
+          color: "#94a3b8",
+          maxWidth: "80%",
+          textAlign: "center",
+        }}
+      >
+        {prompt}
+      </Text>
+    ) : (
+      <Text
+        size="3"
+        style={{
+          color: "#ff4d4f",
+          textAlign: "center",
+        }}
+      >
+        No prompt found, please try again.
+      </Text>
+    )
+  );
+
+  return (
+    <>
+      <Flex justify="center" style={{ marginBottom: 16 }}>
+        <Text size="4" weight="bold">
+          Generated Prompt
+        </Text>
+      </Flex>
+      <Flex justify="center">
+        <Card
+          size="3"
+          style={{
+            backgroundColor: "#212121e6",
+            maxWidth: "90%",
+            padding: 16,
+            borderRadius: 8,
+            marginBottom: 16,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            minWidth: "400px",
+            minHeight: "150px",
+            position: "relative",
+          }}
+        >
+          {renderContent()}
+        </Card>
+      </Flex>
+      {/* Controls */}
+      <Flex justify="center" gap="4" style={{ marginBottom: 16 }}>
+        <Button
+          onClick={() => {
+            navigator.clipboard.writeText(prompt || "");
+            toast("Prompt copied to clipboard!");
+          }}
+          variant="solid"
+          disabled={isUpdating || !prompt}
+        >
+          Copy Prompt
+        </Button>
+        {daydreamUrl && (
+          <Button
+            onClick={() => window.open(daydreamUrl, "_blank")}
+            variant="solid"
+            color="cyan"
+            disabled={isUpdating || !prompt}
+          >
+            Open in Daydream
+          </Button>
+        )}
+      </Flex>
+    </>
+  );
+};

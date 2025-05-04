@@ -52,10 +52,9 @@ async function generatePromptAPI(
  * Renders the home page of the application.
  */
 export default function HomePage() {
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [prompt, setPrompt] = useState<string | null>(null);
-  const [promptIsUpdating, setPromptIsUpdating] = useState(false);
+  const [promptIsUpdating, setPromptIsUpdating] = useState(true);
   const [daydreamUrl, setDaydreamUrl] = useState<string | null>(null);
   const [trends, setTrends] = useState<{ trend: string; score: number }[]>([]);
   const [selectedTrends, setSelectedTrends] = useState<Set<string>>(new Set());
@@ -66,25 +65,6 @@ export default function HomePage() {
     () => trends.filter((t) => selectedTrends.has(t.trend)),
     [trends, selectedTrends]
   );
-
-  useEffect(() => {
-    /** Fetches the latest web trends from the server and updates the state. */
-    const fetchTrends = async () => {
-      try {
-        const trends = await fetchTrendsAPI();
-        setTrends(trends);
-        setSelectedTrends(new Set(trends.map((trend: Trend) => trend.trend)));
-        await generatePrompt(trends);
-      } catch (err) {
-        console.error("Error fetching trends:", err);
-        setError(err instanceof Error ? err.message : "Failed to fetch trends");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTrends();
-  }, []);
 
   /**
    * Toggles the selection of a trend and updates the prompt accordingly.
@@ -123,6 +103,25 @@ export default function HomePage() {
       );
     }
   };
+
+  useEffect(() => {
+    /** Fetches trends and generates the initial prompt. */
+    const initializeData = async () => {
+      try {
+        const trends = await fetchTrendsAPI();
+        setTrends(trends);
+        setSelectedTrends(new Set(trends.map((trend: Trend) => trend.trend)));
+        await generatePrompt(trends);
+      } catch (err) {
+        console.error("Error initializing data:", err);
+        setError(err instanceof Error ? err.message : "Failed to initialize data");
+      } finally {
+        setPromptIsUpdating(false);
+      }
+    };
+  
+    initializeData();
+  }, []);
 
   return (
     <>
@@ -165,7 +164,7 @@ export default function HomePage() {
               flex: 1,
             }}
           >
-            {loading ? (
+            {trends.length === 0 ? (
               <Loading />
             ) : error ? (
               <ErrorComponent message={error} />
