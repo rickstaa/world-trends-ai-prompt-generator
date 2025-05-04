@@ -28,7 +28,7 @@ export const PromptDisplay = ({
   const renderContent = () => (
     isUpdating ? (
       <Flex direction="column" align="center" justify="center">
-        <Spinner size="3" style={{ color: "#fff" }} />
+        <Spinner size="3" style={{ color: "#fff", marginBottom: "16px"}} />
         <Text
           size="2"
           style={{

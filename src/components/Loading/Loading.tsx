@@ -17,7 +17,7 @@ export const Loading = () => (
       textAlign: "center",
     }}
   >
-    <Spinner size="3" style={{ marginBottom: "16px" }} />
+    <Spinner size="3" style={{ color: "#fff", marginBottom: "16px" }} />
     <Text
       size="3"
       style={{
