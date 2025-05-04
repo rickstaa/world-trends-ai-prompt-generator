@@ -30,7 +30,6 @@ export const Error = ({ message }: ErrorProps) => (
         color: "#f87171",
         marginBottom: "8px",
         wordWrap: "break-word",
-        maxWidth: "90%",
       }}
     >
       Error:{" "}

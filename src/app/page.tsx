@@ -119,7 +119,7 @@ export default function HomePage() {
         setPromptIsUpdating(false);
       }
     };
-  
+
     initializeData();
   }, []);
 
@@ -132,36 +132,44 @@ export default function HomePage() {
         align="center"
         justify="center"
         style={{
-          height: "100vh",
+          minHeight: "100vh",
+          padding: "16px",
+          overflowY: "auto",
+          WebkitOverflowScrolling: "touch",
         }}
       >
         <Card
           size="4"
           style={{
             maxWidth: "600px",
-            minHeight: "500px",
             width: "100%",
-            padding: 24,
-            borderRadius: 16,
+            margin: "30px",
+            padding: "16px",
+            borderRadius: "16px",
             display: "flex",
             flexDirection: "column",
+            minHeight: "300px",
+            height: "auto",
+            boxSizing: "border-box",
+            overflowY: "auto",
+            WebkitOverflowScrolling: "touch",
           }}
         >
-          <Box style={{ marginBottom: 16, textAlign: "center" }}>
-            <Text size="7" weight="bold">
+          <Box style={{ marginBottom: "16px", textAlign: "center" }}>
+            <Text size="7" weight="bold" style={{ fontSize: "1.5rem" }}>
               World Trends AI Prompt Generator
             </Text>
           </Box>
           <Flex justify="center">
-            <Separator style={{ marginBottom: 16, width: "95%" }} />
+            <Separator style={{ marginBottom: "16px", width: "95%" }} />
           </Flex>
-
           <Flex
             direction="column"
             align="center"
             justify="center"
             style={{
               flex: 1,
+              gap: "16px",
             }}
           >
             {trends.length === 0 ? (

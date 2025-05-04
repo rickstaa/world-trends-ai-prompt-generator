@@ -33,7 +33,6 @@ export const PromptDisplay = ({
           size="2"
           style={{
             color: "#a1a1aa",
-            marginTop: 8,
             textAlign: "center",
           }}
         >
@@ -66,20 +65,18 @@ export const PromptDisplay = ({
 
   return (
     <>
-      <Flex justify="center" style={{ marginBottom: 16 }}>
+      <Flex justify="center">
         <Text size="4" weight="bold">
           Generated Prompt
         </Text>
       </Flex>
       <Flex justify="center">
         <Card
-          size="3"
+          size="1"
           style={{
             backgroundColor: "#212121e6",
             maxWidth: "90%",
-            padding: 16,
-            borderRadius: 8,
-            marginBottom: 16,
+            borderRadius: "8px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -92,7 +89,7 @@ export const PromptDisplay = ({
         </Card>
       </Flex>
       {/* Controls */}
-      <Flex justify="center" gap="4" style={{ marginBottom: 16 }}>
+      <Flex justify="center" gap="4">
         <Button
           onClick={() => {
             navigator.clipboard.writeText(prompt || "");
@@ -103,16 +100,15 @@ export const PromptDisplay = ({
         >
           Copy Prompt
         </Button>
-        {daydreamUrl && (
-          <Button
-            onClick={() => window.open(daydreamUrl, "_blank")}
-            variant="solid"
-            color="cyan"
-            disabled={isUpdating || !prompt}
-          >
-            Open in Daydream
-          </Button>
-        )}
+
+        <Button
+          onClick={() => window.open(daydreamUrl || "https://daydream.live", "_blank")}
+          variant="solid"
+          color="cyan"
+          disabled={isUpdating || !prompt}
+        >
+          Open in Daydream
+        </Button>
       </Flex>
     </>
   );

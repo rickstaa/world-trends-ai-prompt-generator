@@ -52,8 +52,8 @@ export const TrendsList = ({
       style={{
         maxWidth: "90%",
         overflowY: "auto",
-        marginBottom: 16,
-        marginTop: 16,
+        marginBottom: "14px",
+        marginTop: "10px",
       }}
     >
       {normalizedTrends.map((trend, index) => (

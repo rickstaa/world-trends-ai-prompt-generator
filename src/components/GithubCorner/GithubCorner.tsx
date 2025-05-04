@@ -1,5 +1,5 @@
 /**
- * @file Component to display a GitHub corner link.
+ * @file Contains a Github corner component.
  *
  * @see https://tholman.com/github-corners/
  */
@@ -15,7 +15,7 @@ interface GithubCornerProps {
 }
 
 /**
- * Renders a GitHub corner link.
+ * Github corner component.
  */
 export const GithubCorner = ({ href }: GithubCornerProps) => {
   const [mounted, setMounted] = useState(false);
@@ -40,13 +40,12 @@ export const GithubCorner = ({ href }: GithubCornerProps) => {
           viewBox="0 0 250 250"
           style={{
             fill: "#fff",
-            color: "#151513",
+            color:  "#151513",
             position: "absolute",
             top: 0,
             border: 0,
             right: 0,
-            width: "80px",
-            height: "80px",
+            zIndex: 2,
           }}
           className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20"
           aria-hidden="true"
