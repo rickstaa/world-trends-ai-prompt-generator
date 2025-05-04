@@ -17,7 +17,7 @@ interface TrendListProps {
 
 /**
  * Renders a list of web trends as badges.
- * 
+ *
  * @param props - The component props.
  * @returns The TrendsList component.
  */
@@ -68,7 +68,11 @@ export const TrendsList = ({
             }}
             onClick={() => toggleTrendSelection(trend.trend)}
           >
-            {trend.trend} ({trend.score.toFixed(2)}%)
+            {trend.trend} (
+            {trend.score < 0.01 && trend.score > 0
+              ? "~0.00%"
+              : trend.score.toFixed(2) + "%"}
+            )
           </Badge>
         </Tooltip>
       ))}
