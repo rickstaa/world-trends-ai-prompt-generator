@@ -9,6 +9,9 @@ import { Theme } from "@radix-ui/themes";
 export const metadata: Metadata = {
   title: "World Trends AI Prompt Generator",
   description: "Generates AI animation prompts by analysing trends from the web.",
+  openGraph: {
+    images: "/app_banner.png",
+  },
 };
 
 /**
