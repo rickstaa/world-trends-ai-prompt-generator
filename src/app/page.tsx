@@ -11,6 +11,7 @@ import { PromptDisplay } from "@/components/PromptDisplay";
 import { TrendsList } from "@/components/TrendsList";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Trend } from "@/types";
+import { GithubCorner } from "@/components/GithubCorner";
 
 /**
  * Fetches the latest web trends from the server.
@@ -125,6 +126,7 @@ export default function HomePage() {
 
   return (
     <>
+      <GithubCorner href="https://github.com/rickstaa/world-trends-ai-prompt-generator" />
       <Toaster />
       <Flex
         direction="column"
