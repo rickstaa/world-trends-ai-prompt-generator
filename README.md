@@ -1,6 +1,6 @@
 # World Trends AI Prompt Generator
 
-[![Application Banner](src/app/public/app_banner.png)](https://world-trends-ai-prompts.rickstaa.dev/)
+[![Application Banner](public/app_banner.png)](https://world-trends-ai-prompts.rickstaa.dev/)
 
 World Trends AI Prompt Generator is a web application that fetches real-time web trends and generates concise, AI-powered animation prompts. These prompts are designed to inspire creative projects and can be directly used with platforms like [Daydream](https://daydream.live), a real-time AI application that performs compute on top of the [Livepeer network](https://livepeer.org). The app leverages the [Livepeer LLM Pipeline](https://docs.livepeer.org/ai/pipelines/llm) for prompt generation and falls back to the [OpenAI API](https://openai.com/api/) if needed.
 
