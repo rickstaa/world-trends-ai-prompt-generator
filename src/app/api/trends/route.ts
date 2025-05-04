@@ -5,7 +5,9 @@ import { NextResponse } from "next/server";
 import { fetchTwitterTrends } from "@/lib/trends";
 import { normalizeTrendScores } from "@/lib/utils";
 
-const S_MAXAGE = parseInt(process.env.TRENDS_SHARED_CACHE_MAXAGE || "3600", 10); // Default: 3600 seconds (1 hour)
+const S_MAXAGE = parseInt(process.env.TRENDS_SHARED_CACHE_MAXAGE || "3600", 10); // 1 hour
+const STALE_WHILE_REVALIDATE = 600; // 10 minutes
+const CACHE_HEADER = `s-maxage=${S_MAXAGE}, stale-while-revalidate=${STALE_WHILE_REVALIDATE}`;
 
 /**
  * Retrieve keyword list of current trends from the web.
@@ -17,37 +19,19 @@ export async function GET() {
     if (!trends?.length) {
       return NextResponse.json(
         { error: "No trends data available" },
-        {
-          status: 400,
-          headers: {
-            "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
-          },
-        }
+        { status: 400 }
       );
     }
 
-    // Normalize scores to ensure they sum to 100%.
     const normalizedTrends = normalizeTrendScores(trends);
-
-    return NextResponse.json(
-      { trends: normalizedTrends },
-      {
-        headers: {
-          "Cache-Control":
-            `public, s-maxage=${S_MAXAGE}, max-age=600, stale-while-revalidate=600`,
-        },
-      }
-    );
+    const response = NextResponse.json({ trends: normalizedTrends });
+    response.headers.set("Cache-Control", CACHE_HEADER);
+    return response;
   } catch (error) {
     console.error("Error fetching trends:", error);
     return NextResponse.json(
       { error: "Failed to fetch trends" },
-      {
-        status: 500,
-        headers: {
-          "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
-        },
-      }
+      { status: 500 }
     );
   }
 }
