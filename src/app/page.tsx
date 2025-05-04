@@ -48,18 +48,6 @@ async function generatePromptAPI(
 }
 
 /**
- * Applies Daydream parameters to the generated prompt.
- * @param prompt - The generated prompt.
- * @returns The prompt with Daydream parameters appended.
- */
-const applyDaydreamParams = (prompt: string): string => {
-  const params = Object.entries(DAYDREAM_PARAMS)
-    .map(([key, value]) => `--${key} ${value}`)
-    .join(" ");
-  return `${prompt}${btoa(" " + params)}`;
-};
-
-/**
  * Renders the home page of the application.
  */
 export default function HomePage() {
