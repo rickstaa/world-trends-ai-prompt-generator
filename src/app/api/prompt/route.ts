@@ -5,25 +5,6 @@ import { NextResponse } from "next/server";
 import { generateAnimationPrompt } from "@/lib/prompt";
 import { normalizeTrendScores } from "@/lib/utils";
 
-const DAYDREAM_PARAMS = {
-  /** Diffusion Quality */
-  quality: 2,
-  /** Diffusion Creativity */
-  creativity: 0.5,
-};
-
-/**
- * Applies Daydream parameters to the generated prompt.
- * @param prompt - The generated prompt.
- * @returns The prompt with Daydream parameters appended.
- */
-const applyDaydreamParams = (prompt: string): string => {
-  const params = Object.entries(DAYDREAM_PARAMS)
-    .map(([key, value]) => `--${key} ${value}`)
-    .join(" ");
-  return `${prompt} ${params}`;
-};
-
 /**
  * Validate the trends array to ensure it matches the expected format.
  * @param trends - The trends array to validate.
@@ -71,9 +52,7 @@ export async function POST(request: Request) {
 
     // Generate prompt and create Daydream URL.
     const prompt = await generateAnimationPrompt(normalizedTrends);
-    const daydreamUrl = `https://daydream.live/create?inputPrompt=${btoa(
-      applyDaydreamParams(prompt)
-    )}`;
+    const daydreamUrl = `https://daydream.live/create?inputPrompt=${btoa(prompt)}`;
 
     return NextResponse.json({ prompt, daydreamUrl });
   } catch (error) {
