@@ -25,7 +25,7 @@ export const Loading = () => (
         maxWidth: "80%",
       }}
     >
-      Fetching world trends and generating your animation prompt...
+      Fetching world trends...
     </Text>
   </Flex>
 );
