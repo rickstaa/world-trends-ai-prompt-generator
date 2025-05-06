@@ -39,46 +39,6 @@ const removeLlamaHeaders = (output: string): string => {
 };
 
 /**
- * Attempts to generate a prompt using the provided client and request.
- *
- * @param client - The AI client (Livepeer or OpenAI).
- * @param request - The request payload for the client.
- * @param isLivepeer - Whether the client is Livepeer (affects request structure).
- * @returns The generated prompt or null if the client fails.
- */
-const tryGeneratePrompt = async (
-  client: any,
-  request: any,
-  isLivepeer: boolean
-): Promise<string | null> => {
-  try {
-    const response = isLivepeer
-      ? await client.generate.llm({ ...request, maxTokens: 72 })
-      : await client.chat.completions.create({
-          ...request,
-          model: "gpt-3.5-turbo",
-          max_tokens: 59,
-        });
-
-    const content = isLivepeer
-      ? response?.llmResponse?.choices?.[0]?.message?.content
-      : response.choices[0]?.message?.content?.trim();
-
-    if (!content) {
-      throw new Error("Response did not contain valid content.");
-    }
-
-    return isLivepeer ? removeLlamaHeaders(content) : content;
-  } catch (error) {
-    console.error(
-      `${isLivepeer ? "Livepeer" : "OpenAI"} request failed:`,
-      error instanceof Error ? error.message : error
-    );
-    return null;
-  }
-};
-
-/**
  * Generates a concise animation prompt based on the provided trends and their
  * importance.
  *
@@ -111,22 +71,59 @@ export const generateAnimationPrompt = async (
     ],
   };
 
-    // Attempts to generate an animation prompt using Livepeer and then OpenAI.
-    let content: string | null = null;
-    if (livepeerClient) {
-      content = await tryGeneratePrompt(livepeerClient, request, true);
-    }
-    if (!content && openAiClient) {
-      content = await tryGeneratePrompt(openAiClient, request, false);
-    }
-  
-    // If both services fail, throw an error.
-    if (!content) {
-      throw new Error(
-        "Unable to generate animation prompt. Please try again later."
+  // Attempt to generate the prompt using Livepeer.
+  if (livepeerClient) {
+    try {
+      const livepeerResponse = await livepeerClient.generate.llm({
+        ...request,
+        maxTokens: 72, // NOTE: Livepeer uses camelCase instead of snake_case.
+      });
+
+      const content =
+        livepeerResponse?.llmResponse?.choices?.[0]?.message?.content;
+
+      if (!content) {
+        throw new Error("Livepeer response did not contain valid content.");
+      }
+
+      return removeLlamaHeaders(content).replace(/\s+/g, " ").trim();
+    } catch (error) {
+      console.error(
+        "Livepeer request failed:",
+        error instanceof Error ? error.message : error
       );
     }
-  
-    // Clean up the content by trimming double whitespaces and newlines.
-    return content.replace(/\s+/g, " ").trim();
+  }
+
+  // Fallback to OpenAI if Livepeer fails.
+  if (openAiClient) {
+    try {
+      const openAiRequest = {
+        ...request,
+        model: "gpt-3.5-turbo",
+        max_tokens: 59,
+      } as OpenAI.ChatCompletionCreateParamsNonStreaming;
+
+      const openAiResponse =
+        await openAiClient.chat.completions.create(openAiRequest);
+
+      const content = openAiResponse.choices[0]?.message?.content?.trim();
+
+      if (!content) {
+        throw new Error("OpenAI response did not contain valid content.");
+      }
+
+      return content.replace(/\s+/g, " ").trim();
+    } catch (error) {
+      console.error(
+        "OpenAI request failed:",
+        error instanceof Error ? error.message : error
+      );
+    }
+  }
+
+  // If both services fail, throw an error.
+  throw new Error(
+    "Unable to generate animation prompt. Please try again later."
+  );
 };
