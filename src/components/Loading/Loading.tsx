@@ -22,7 +22,6 @@ export const Loading = () => (
       size="3"
       style={{
         color: "#94a3b8",
-        maxWidth: "80%",
       }}
     >
       Fetching world trends...
